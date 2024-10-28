@@ -12,9 +12,8 @@ import retrofit2.Retrofit
 
 @Module()
 @InstallIn(SingletonComponent::class)
-object  AppModule {
-    val retrofitBuilder : Retrofit = Retrofit.Builder()
-        .addConverterFactory(GsonConverterFactory.create())
+object AppModule {
+    val retrofitBuilder: Retrofit = Retrofit.Builder()
         .baseUrl(Endpoints.baseUrl)
         .build()
 
@@ -25,5 +24,6 @@ object  AppModule {
     }
 
     @Provides
-    fun provideImageProcessorRepository(): ImageProcessorRepository = ImageProcessorRepositoryImpl()
+    fun provideImageProcessorRepository(apiDataSource: ImageProcessorApiDataSource): ImageProcessorRepository =
+        ImageProcessorRepositoryImpl(apiDataSource)
 }

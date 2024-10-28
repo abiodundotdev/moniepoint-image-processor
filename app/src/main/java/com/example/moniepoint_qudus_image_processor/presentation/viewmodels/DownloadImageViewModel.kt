@@ -3,6 +3,8 @@ package com.example.moniepoint_qudus_image_processor.presentation.viewmodels
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.geometry.Size
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.moniepoint_qudus_image_processor.data.DownloadImageResponse
@@ -10,8 +12,10 @@ import com.example.moniepoint_qudus_image_processor.data.ImageProcessorApiDataSo
 import com.example.moniepoint_qudus_image_processor.data.ImageProcessorRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import java.io.ByteArrayOutputStream
 import java.io.InputStream
 import javax.inject.Inject
 
@@ -19,22 +23,20 @@ import javax.inject.Inject
 class DownloadImageViewModel @Inject constructor(
         private val repository : ImageProcessorRepository
 )  : ViewModel() {
-    var uiState = mutableStateOf<ViewState>(ViewState.Loading)
+    private var _uiState =  mutableStateOf<ViewState>(ViewState.Loading)
+    val uiState = _uiState
 
     fun downloadImage(url: String) {
         viewModelScope.launch {
-            try {
                 val responseBody = withContext(Dispatchers.IO) {
-                    repository.downloadImage(url).collect{ value ->
-                        uiState.value = ViewState.Success<DownloadImageResponse>()
-                    }
+                    repository.downloadImage(url)
+                        .catch {
+                            _uiState.value = ViewState.Error("Failed to download image")
+                        }
+                        .collect { value ->
+                            _uiState.value = ViewState.Success<DownloadImageResponse>(value)
+                        }
                 }
-                val inputStream: InputStream = responseBody.byteStream()
-                val bitmap = BitmapFactory.decodeStream(inputStream)
-                uiState.value = bitmap
-            } catch (e: Exception) {
-                // Handle error
-            }
         }
     }
 }
