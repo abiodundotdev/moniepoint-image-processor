@@ -1,6 +1,12 @@
 # Image Processor
 
-Android Project for processing Images
+Android Project for processing Images downloaded from a specified URL
+
+#### Processing options
+- Resizing
+- Compression
+- Filter [GrayScale, Sepia]
+
 
 ## Getting Started
 
