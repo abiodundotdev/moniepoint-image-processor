@@ -24,4 +24,8 @@ git clone https://github.com/abiodundotdev/moniepoint-image-processor.git
 - Hilt -  For dependency injection/service container
 - Retrofit - For API calls
 
+Image 
+
+<img src="https://raw.githubusercontent.com/abiodundotdev/moniepoint-image-processor/master/screenshot.png?raw=true"  width= "300px" height ="500px" />
+
 
