@@ -4,8 +4,6 @@ Android Project for processing Images
 
 ## Getting Started
 
-This repository is for Moniepoint Coding Challenge
-
 > To run the code, run the command below to clone and :
 
 ```
